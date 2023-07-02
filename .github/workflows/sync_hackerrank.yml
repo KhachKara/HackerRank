@@ -1,19 +1,30 @@
-name: Sync_HackerRank
+name: Hackerrank Sync
 
 on:
-  workflow_dispatch:
-  schedule:
-      - cron: "0 8 * * 6"
-  
+  push:
+    branches:
+      - main  # Замените на вашу основную ветку
+
 jobs:
-  build:
+  sync:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Sync
-       # uses: joshcai/leetcode-sync@v1.5
-        with:
-          github-token: ${{ github.token }}
-          remember_hacker_token: ${{ secrets.REMEMBER_HACKER_TOKEN }}
-          _hjSessionUser_2036154: ${{ secrets._HJSESSIONUSER_2036154 }}
-          destination-folder: problems
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Sync Hackerrank
+        run: |
+          # Клонируем репозиторий Hackerrank
+          git clone <URL_ВАШЕГО_РЕПОЗИТОРИЯ_HACKERRANK> hackerrank
+
+          # Копируем файлы из репозитория на GitHub в репозиторий Hackerrank
+          cp -R <ПУТЬ_К_ВАШЕМУ_РЕПОЗИТОРИЮ_GITHUB>/. hackerrank
+
+          # Переходим в папку с репозиторием Hackerrank
+          cd hackerrank
+
+          # Зафиксируем изменения и отправим их в репозиторий Hackerrank
+          git add .
+          git commit -m "Sync Hackerrank with GitHub"
+          git push origin main  # Замените на вашу основную ветку
